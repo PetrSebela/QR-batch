@@ -1,23 +1,32 @@
+from typing import List
 import qrcode
+from PIL import Image
 
-separator = 'X'
-fields = 3
-spaceLen = 4
+CONST = 250
 
-def generate(frm,to,location):
-    for count in range(frm,to,1):
-        exit = 'CZP'
-        fill = ''
-        for exc in range((fields*spaceLen)-len(str(count))):
-            fill += '0'
-        
-        fill += str(count)
-        for number in fill:
-            exit += number
+def generate(start,stop) -> List:
+    returnList = []
+    for count in range(start,stop,1):
+        returnList.append(str(count))
+    return returnList
 
-        for x in [3,8,13]:
-            lst = list(exit)
-            lst.insert(x, separator)
-            exit = ''.join(lst)
-        code = qrcode.make(exit)
-        code.save(location+'/'+exit+'.png')
+def createQR(data,location,size) -> None:
+    code = qrcode.QRCode(
+        border=0
+    )
+    code.add_data(data)
+    code.make()
+    code = code.make_image(fill='black',back_color='white')
+    code.save(location+'/'+data+'.png')
+
+    img = Image.open(location+'/'+data+'.png')
+    img = img.resize((250,250))
+    print(mm2DPI(size))
+    img.save(location+'/'+data+".png",dpi=(mm2DPI(size),mm2DPI(size)))
+
+
+def mm2DPI(dim) -> float:
+    return CONST/(dim/25.4)
+
+
+#createQR('suck','codes',0.2)
