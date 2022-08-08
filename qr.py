@@ -1,4 +1,3 @@
-from typing import List
 import qrcode
 from PIL import Image
 
@@ -27,6 +26,3 @@ def createQR(data,location,size) -> None:
 
 def mm2DPI(dim) -> float:
     return CONST/(dim/25.4)
-
-
-#createQR('suck','codes',0.2)
